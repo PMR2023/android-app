@@ -1,31 +1,64 @@
 package fr.ec.app
 
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val list = findViewById<LinearLayout>(R.id.list)
+        val postItems = mutableListOf<Int>()
+        val list = findViewById<RecyclerView>(R.id.list)
+        repeat(100_000) {item ->
+            postItems.add(item)
+        }
 
-        repeat(100) {item ->
-            val postItem = layoutInflater.inflate(R.layout.post_item,list,false)
-            val title  = postItem.findViewById<TextView>(R.id.post_title)
-            val subTitle  = postItem.findViewById<TextView>(R.id.post_subTitle)
-            val image  = postItem.findViewById<ImageView>(R.id.post_image)
-            title.text = "Title $item"
-            subTitle.text = "Subtitle $item"
+        list.adapter = PostAdapter(dataSet = postItems)
+        list.layoutManager = LinearLayoutManager(this)
 
+
+    }
+
+    class PostAdapter(
+        private val dataSet : List<Int>
+    ) : RecyclerView.Adapter<ViewHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val holder = PostViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.post_item,parent,false)
+            )
+
+            return holder
+        }
+
+        override fun getItemCount(): Int = dataSet.size
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            (holder as PostViewHolder).bind(dataSet.get(position))
+        }
+
+    }
+
+    class PostViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+
+        fun bind(postItem : Int) {
+            val title  = itemView.findViewById<TextView>(R.id.post_title)
+            val subTitle  = itemView.findViewById<TextView>(R.id.post_subTitle)
+            val image  = itemView.findViewById<ImageView>(R.id.post_image)
+            title.text = "Title $postItem"
+            subTitle.text = "Subtitle $postItem"
             image.setImageResource(R.mipmap.ic_launcher)
 
-
-            list.addView(postItem)
         }
+
     }
 }
