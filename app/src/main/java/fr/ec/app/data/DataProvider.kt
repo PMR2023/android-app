@@ -3,6 +3,8 @@ package fr.ec.app.data
 import com.google.gson.Gson
 import fr.ec.app.data.api.response.PostResponse
 import fr.ec.app.data.api.response.PostsResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -18,12 +20,13 @@ object DataProvider {
 
 
     private val gson = Gson()
-    fun getData(onSuccess :(List<Post>)->Unit,onError : (Throwable)->Unit)  {
-        BACKGOURND.submit {
-            try {
-                val json :String? = makeCall()
-                val postsResponse = gson.fromJson<PostsResponse>(json, PostsResponse::class.java)
-                val postList = postsResponse.posts.filter { it.name !=  null && it.tagline != null && it.thumbnail?.url != null }.map {
+
+    suspend fun getPosts(): List<Post> = withContext(Dispatchers.IO) {
+        val json: String? = makeCall()
+        val postsResponse = gson.fromJson<PostsResponse>(json, PostsResponse::class.java)
+        val postList =
+            postsResponse.posts.filter { it.name != null && it.tagline != null && it.thumbnail?.url != null }
+                .map {
                     Post(
                         title = it.name.orEmpty(),
                         subTitle = it.tagline.orEmpty(),
@@ -31,13 +34,10 @@ object DataProvider {
                     )
                 }
 
-                onSuccess(postList)
+        postList
 
-            }catch (e :Exception) {
-                onError(e)
-            }
-        }
     }
+
 
     private fun makeCall(): String? {
         var urlConnection: HttpURLConnection? = null
