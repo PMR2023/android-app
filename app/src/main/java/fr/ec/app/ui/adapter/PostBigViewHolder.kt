@@ -5,14 +5,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import fr.ec.app.R
+import fr.ec.app.data.Post
 
 class PostBigViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-    fun bind(postItem : Int) {
+    fun bind(postItem : Post) {
         val title  = itemView.findViewById<TextView>(R.id.big_post_title)
         val subTitle  = itemView.findViewById<TextView>(R.id.big_post_description)
         val image  = itemView.findViewById<ImageView>(R.id.big_post_image)
-        title.text = "Title $postItem"
-        subTitle.text = "Subtitle $postItem"
+        title.text = postItem.title
+        subTitle.text = postItem.subTitle
         image.setImageResource(R.mipmap.ic_launcher)
 
     }
