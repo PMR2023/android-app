@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import fr.ec.app.R
 import fr.ec.app.data.Post
 
@@ -15,8 +16,11 @@ class PostViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val image  = itemView.findViewById<ImageView>(R.id.post_image)
         title.text = postItem.title
         subTitle.text = postItem.subTitle
-        image.setImageResource(R.mipmap.ic_launcher)
-
+        Picasso.get().load(postItem.imageUrl)
+            .placeholder(R.mipmap.ic_launcher)
+            .into(
+            image
+        )
     }
 
 }
