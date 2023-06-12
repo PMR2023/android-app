@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">android-app</string>
+    <string name="sub_title">sub-title</string>
 </resources>
