@@ -38,11 +38,12 @@ class MainActivity : AppCompatActivity() {
 
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         val errorView = findViewById<ConstraintLayout>(R.id.errorView)
+        val dataProvider = DataProvider(application = this.application)
         coroutineScope.launch {
             try {
                 errorView.visibility = View.GONE
                 progressBar.visibility = View.VISIBLE
-                val postList = DataProvider.getPosts()
+                val postList = dataProvider.getPosts()
                 list.adapter = PostAdapter(dataSet = postList)
                 progressBar.visibility = View.INVISIBLE
 
