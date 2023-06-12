@@ -24,7 +24,7 @@ object DataProvider {
     private val services = retrofit.create(Services::class.java)
 
 
-    suspend fun getPosts(): List<Post> = withContext(Dispatchers.IO) {
+    suspend fun getPosts(): List<Post> = withContext(Dispatchers.Default) {
         val postsResponse = services.getPosts()
         val postList =
             postsResponse.posts.filter { it.name != null && it.tagline != null && it.thumbnail?.url != null }

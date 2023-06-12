@@ -1,7 +1,10 @@
 package fr.ec.app.ui
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
@@ -27,10 +30,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val list = findViewById<RecyclerView>(R.id.list)
-
+        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         coroutineScope.launch {
+            progressBar.visibility = View.VISIBLE
             val postList = DataProvider.getPosts()
             list.adapter = PostAdapter(dataSet = postList)
+            progressBar.visibility = View.INVISIBLE
         }
 
         list.layoutManager = LinearLayoutManager(this)
