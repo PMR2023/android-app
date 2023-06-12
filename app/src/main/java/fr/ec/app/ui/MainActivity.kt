@@ -41,6 +41,4 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         coroutineScope.cancel()
     }
-
-
 }
